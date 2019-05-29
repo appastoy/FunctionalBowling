@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -45,28 +45,28 @@ namespace FunctionalBowling
         {
             Console.WriteLine($"The score of empty fall is {BowlingScoreCalculator.CalculateScore(Enumerable.Empty<int>())}");
             Console.WriteLine($"The score of (5) is {BowlingScoreCalculator.CalculateScore(new[] { 5 })}");
-            Console.WriteLine($"The score of (5, 4) is {BowlingScoreCalculator.CalculateScore(new[] { 5, 4 })}");
             Console.WriteLine($"The score of (5, 5) is {BowlingScoreCalculator.CalculateScore(new[] { 5, 5 })}");
+            Console.WriteLine($"The score of (5, 4) is {BowlingScoreCalculator.CalculateScore(new[] { 5, 4 })}");
             Console.WriteLine($"The score of (5, 5, 5) is {BowlingScoreCalculator.CalculateScore(new[] { 5, 5, 5 })}");
             Console.WriteLine($"The score of (10) is {BowlingScoreCalculator.CalculateScore(new[] { 10 })}");
             Console.WriteLine($"The score of (10, 5) is {BowlingScoreCalculator.CalculateScore(new[] { 10, 5 })}");
             Console.WriteLine($"The score of (10, 5, 5) is {BowlingScoreCalculator.CalculateScore(new[] { 10, 5, 5 })}");
+            Console.WriteLine($"The score of (10, 5, 4) is {BowlingScoreCalculator.CalculateScore(new[] { 10, 5, 4 })}");
             Console.WriteLine($"The score of perfect falls is {BowlingScoreCalculator.CalculateScore(Enumerable.Repeat(10, 12))}");
 
             /*
              
             Output
-
             The score of empty fall is 0
             The score of (5) is 0
-            The score of (5, 4) is 9
             The score of (5, 5) is 0
+            The score of (5, 4) is 9
             The score of (5, 5, 5) is 15
             The score of (10) is 0
             The score of (10, 5) is 0
             The score of (10, 5, 5) is 20
+            The score of (10, 5, 4) is 28
             The score of perfect falls is 300
-
             */
         }
     }
