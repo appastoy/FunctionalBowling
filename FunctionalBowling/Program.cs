@@ -30,11 +30,6 @@ namespace FunctionalBowling
         static bool IsStrike(IEnumerable<int> falls) => falls.First() == MaxFramePinCount;
         static bool IsSpare(IEnumerable<int> falls) => falls.Take(2).Sum() == MaxFramePinCount;
         
-        static int  GetNeedScoreAggregationRollCount(IEnumerable<int> falls)
-        {
-            return IsStrike(falls) || IsSpare(falls) ? ScoreAggregationRollCountWithBonus : ScoreAggregationRollCount;
-        }
-        
         static int  CalculateFrameScore(IEnumerable<int> falls)
         {
             return CanCalculateFrameScore(falls) ? EmptyScore : falls.Take(GetNeedScoreAggregationRollCount(falls)).Sum();
@@ -43,6 +38,11 @@ namespace FunctionalBowling
         static bool CanCalculateFrameScore(IEnumerable<int> falls)
         {
             return falls.Count() < GetNeedScoreAggregationRollCount(falls);
+        }
+        
+        static int  GetNeedScoreAggregationRollCount(IEnumerable<int> falls)
+        {
+            return IsStrike(falls) || IsSpare(falls) ? ScoreAggregationRollCountWithBonus : ScoreAggregationRollCount;
         }
         
         static IEnumerable<int> GetNextFrameFalls(IEnumerable<int> falls)
