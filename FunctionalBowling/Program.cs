@@ -6,36 +6,54 @@ namespace FunctionalBowling
 {
     static class BowlingScoreCalculator
     {
+        static readonly int LastFrameNumber = 10;
+        static readonly int MaxFramePinCount = 10;
+        static readonly int ScoreAggregationRollCountWithBonus = 3;
+        static readonly int ScoreAggregationRollCount = 2;
+        static readonly int FrameRollCountOnStrike = 1;
+        static readonly int FrameRollCount = 1;
+        static readonly int EmptyScore = 0;
+        
         public static int CalculateScore(IEnumerable<int> falls)
         {
-            return CalculateRecursive(falls, 1);
+            return CalculateScoreRecursive(falls, 1);
         }
-
-        static int CalculateRecursive(IEnumerable<int> falls, int frameNumber)
+        
+        static int CalculateScoreRecursive(IEnumerable<int> falls, int frameNumber)
         {
-            return IsLastFrameOrHasNoFalls(frameNumber, falls) ? 0 :
-                CalculateFrameScore(falls, CalculateRollCountForScoreAggregation(falls)) +
-                CalculateRecursive(falls.Skip(CalculateFrameRollCount(falls)), frameNumber + 1);
+            return !IsValidFrame(frameNumber) || !HasFalls(falls) ? EmptyScore :
+                CalculateFrameScore(falls, GetNeedScoreAggregationRollCount(falls)) +
+                CalculateScoreRecursive(GetNextFrameFalls(falls), frameNumber + 1);
         }
-
-        static bool IsLastFrameOrHasNoFalls(int frameNumber, IEnumerable<int> falls)
+    
+        static bool IsValidFrame(int frameNumber) => frameNumber <= LastFrameNumber;
+        static bool HasFalls(IEnumerable<int> falls) => falls.Any();
+        static bool IsStrike(IEnumerable<int> falls) => falls.First() == MaxFramePinCount;
+        static bool IsSpare(IEnumerable<int> falls) => falls.Take(2).Sum() == MaxFramePinCount;
+        
+        static int  GetNeedScoreAggregationRollCount(IEnumerable<int> falls)
         {
-            return frameNumber > 10 || !falls.Any();
+            return IsStrike(falls) || IsSpare(falls) ? ScoreAggregationRollCountWithBonus : ScoreAggregationRollCount;
         }
-
-        static int CalculateRollCountForScoreAggregation(IEnumerable<int> falls)
+        
+        static int  CalculateFrameScore(IEnumerable<int> falls, int scoreRollCount)
         {
-            return falls.First() == 10 || falls.Take(2).Sum() == 10 ? 3 : 2;
+            return CanCalculateFrameScore(falls) ? EmptyScore : falls.Take(scoreRollCount).Sum();
         }
-
-        static int CalculateFrameScore(IEnumerable<int> falls, int scoreRollCount)
+        
+        static bool CanCalculateFrameScore(IEnumerable<int> falls)
         {
-            return falls.Count() < scoreRollCount ? 0 : falls.Take(scoreRollCount).Sum();
+            return falls.Count() < GetNeedScoreAggregationRollCount(falls);
         }
-
-        static int CalculateFrameRollCount(IEnumerable<int> falls)
+        
+        static IEnumerable<int> GetNextFrameFalls(IEnumerable<int> falls)
         {
-            return falls.First() == 10 ? 1 : 2;
+            return falls.Skip(GetFrameRollCount(falls));
+        }
+        
+        static int  GetFrameRollCount(IEnumerable<int> falls)
+        {
+            return IsStrike(falls) ? FrameRollCountOnStrike : FrameRollCount;
         }
     }
 
