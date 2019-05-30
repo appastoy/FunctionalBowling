@@ -11,7 +11,7 @@ namespace FunctionalBowling
         static readonly int ScoreAggregationRollCountWithBonus = 3;
         static readonly int ScoreAggregationRollCount = 2;
         static readonly int FrameRollCountOnStrike = 1;
-        static readonly int FrameRollCount = 1;
+        static readonly int FrameRollCount = 2;
         static readonly int EmptyScore = 0;
         
         public static int CalculateScore(IEnumerable<int> falls)
