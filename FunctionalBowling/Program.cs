@@ -22,8 +22,7 @@ namespace FunctionalBowling
         static int CalculateScoreRecursive(IEnumerable<int> falls, int frameNumber)
         {
             return !IsValidFrame(frameNumber) || !HasFalls(falls) ? EmptyScore :
-                CalculateFrameScore(falls, GetNeedScoreAggregationRollCount(falls)) +
-                CalculateScoreRecursive(GetNextFrameFalls(falls), frameNumber + 1);
+                CalculateFrameScore(falls) + CalculateScoreRecursive(GetNextFrameFalls(falls), frameNumber + 1);
         }
     
         static bool IsValidFrame(int frameNumber) => frameNumber <= LastFrameNumber;
@@ -36,9 +35,9 @@ namespace FunctionalBowling
             return IsStrike(falls) || IsSpare(falls) ? ScoreAggregationRollCountWithBonus : ScoreAggregationRollCount;
         }
         
-        static int  CalculateFrameScore(IEnumerable<int> falls, int scoreRollCount)
+        static int  CalculateFrameScore(IEnumerable<int> falls)
         {
-            return CanCalculateFrameScore(falls) ? EmptyScore : falls.Take(scoreRollCount).Sum();
+            return CanCalculateFrameScore(falls) ? EmptyScore : falls.Take(GetNeedScoreAggregationRollCount(falls)).Sum();
         }
         
         static bool CanCalculateFrameScore(IEnumerable<int> falls)
